@@ -1,0 +1,14 @@
+---
+- hosts: nodos
+  become: yes
+  tasks:
+    - name: nginx
+      apt:
+        name: 
+          - nginx 
+        state: latest
+    - name: Start/Enable
+      service:
+        name: nginx
+        state: started
+        enabled: yes

@@ -1,0 +1,5 @@
+---
+- hosts: mvirtual-redstratio
+  tasks:
+  - name: ping
+    ping:

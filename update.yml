@@ -1,0 +1,13 @@
+---
+- hosts: nodos
+  become: yes
+  tasks:
+    - name: update and upgrade
+      apt:
+        update_cache: yes
+        upgrade: safe
+    - name: net-tools
+      apt: 
+        name:
+        -  net-tools 
+        state: latest
