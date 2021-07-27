@@ -1,0 +1,51 @@
+---
+- hosts: nodos
+  become: yes
+  tasks:
+  - name: descargar hadoop
+    get_url:
+      url: http://apache.rediris.es/hadoop/common/hadoop-3.3.0/hadoop-3.3.0.tar.gz
+      dest: /root/
+  - name: descomprimir
+    unarchive: 
+      src: /root/hadoop-3.3.0.tar.gz
+      dest: /usr/local/
+      remote_src: yes
+  - name: volcado 1
+    copy:
+      src: config_hadoop/core-site.xml
+      dest: /usr/local/hadoop-3.3.0/etc/hadoop/core-site.xml
+  - name: volcado 2
+    copy:
+      src: config_hadoop/hadoop-env.sh
+      dest: /usr/local/hadoop-3.3.0/etc/hadoop/hadoop-env.sh
+  - name: volcado 3
+    copy:
+      src: config_hadoop/hdfs-site.xml
+      dest: /usr/local/hadoop-3.3.0/etc/hadoop/hdfs-site.xml
+  - name: volcado 4
+    copy:
+      src: config_hadoop/mapred-site.xml
+      dest: /usr/local/hadoop-3.3.0/etc/hadoop/mapred-site.xml
+  - name: volcado 5
+    copy:
+      src: config_hadoop/slaves
+      dest: /usr/local/hadoop-3.3.0/etc/hadoop/slaves
+  - name: volcado 6
+    copy:
+      src: config_hadoop/yarn-site.xml
+      dest: /usr/local/hadoop-3.3.0/etc/hadoop/yarn-site.xml
+
+- hosts: master
+  become: yes
+  tasks:
+  - name: start hdfs
+    shell: "/usr/local/hadoop-3.3.0/sbin/start-dfs.sh"
+  - name: start yarn
+    shell: "/usr/local/hadoop-3.3.0/sbin/start-yarn.sh"
+
+- hosts: esclavos
+  become: yes
+  tasks:
+  - name: format namenode
+    command: /usr/local/hadoop-3.3.0/bin/hdfs namenode -format
